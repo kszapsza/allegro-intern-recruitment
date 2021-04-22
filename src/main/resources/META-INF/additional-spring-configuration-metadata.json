@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "restTemplate.connectTimeout",
+      "type": "java.lang.Long",
+      "description": "Timeout when connecting to external API with RestTemplate, expressed in milliseconds."
+    },
+    {
+      "name": "restTemplate.readTimeout",
+      "type": "java.lang.Long",
+      "description": "Timeout when connecting to external API with RestTemplate, expressed in milliseconds."
+    },
+    {
+      "name": "githubApi.baseUri",
+      "type": "java.lang.String",
+      "description": "Base URI for GitHub REST API."
+    },
+    {
+      "name": "githubApi.token",
+      "type": "java.lang.String",
+      "description": "Authorization token for GitHub REST API (without any prefixes, such as \"Bearer\")."
+    }
+  ]
+}

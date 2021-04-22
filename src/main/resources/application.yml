@@ -1,0 +1,6 @@
+restTemplate:
+  connectTimeout: 5000
+  readTimeout: 5000
+githubApi:
+  baseUri: "https://api.github.com/"
+  token: null
