@@ -3,3 +3,7 @@ webClient:
 githubApi:
   baseUri: "https://api.github.com/"
   token: ${GITHUB_TOKEN}
+spring:
+  cache:
+    jcache:
+      config: classpath:ehcache.xml

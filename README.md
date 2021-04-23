@@ -35,6 +35,10 @@ API and allows to:
 Returns all repositories in user `{username}` profile. Shows at most 30 repos in a single page. `{page}` parameter
 specifies page number.
 
+```bash
+curl -X GET http://localhost:8080/api/v1/repos/{username}?page={page}
+```
+
 **Sample request:**
 
 ```bash
@@ -72,7 +76,11 @@ curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1
 
 ### Get total stars amount
 
-Returns total amount of stars (*stargazers*) in all user repositories.
+Returns total amount of stars (*stargazers*) in all user (`{username}`) repositories.
+
+```bash
+curl -X GET http://localhost:8080/api/v1/stargazers/{username}
+```
 
 **Sample request:**
 
@@ -96,6 +104,3 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
   total stars amount (for huge `microsoft` GitHub profile with over 4000 repos – even up to 1 minute). This is because
   the application has to send multiple `GET` requests to GitHub API, in order to fetch all pages of paginated result.
   Those requests are now sent synchronously and could be sent asynchronously to improve performance.
-
-* 🧠 **Caching.** Requests sent to this API could be somehow cached in order to reduce amount of calls sent to GitHub
-  API. This could improve overall API performace as well.

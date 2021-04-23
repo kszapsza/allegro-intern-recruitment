@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 
@@ -48,7 +49,7 @@ class RepoServiceTest {
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn(new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK));
+        ).thenReturn(Mono.just(new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK)));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
@@ -65,13 +66,13 @@ class RepoServiceTest {
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn(new ResponseEntity<>(getSampleRepos(), HttpStatus.OK));
+        ).thenReturn(Mono.just(new ResponseEntity<>(getSampleRepos(), HttpStatus.OK)));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
 
         // then
-        assertThat(repos.getRepositories(), hasSize(3));
+        assertThat(repos.getRepositories(), hasSize(getSampleRepos().size()));
         assertThat(repos.getRepositories(), equalTo(getSampleRepos()));
         assertThat(repos.getLinks(), nullValue());
     }
@@ -91,7 +92,7 @@ class RepoServiceTest {
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn(new ResponseEntity<>(getSampleRepos(), httpHeaders, HttpStatus.OK));
+        ).thenReturn((Mono.just(new ResponseEntity<>(getSampleRepos(), httpHeaders, HttpStatus.OK))));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);

@@ -2,6 +2,7 @@ package com.kszapsza.allegrointernrecruitment.repo;
 
 import com.kszapsza.allegrointernrecruitment.util.LinkHeaderParser;
 import com.kszapsza.allegrointernrecruitment.util.Links;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,12 +19,16 @@ public class RepoService {
         this.repoClient = repoClient;
     }
 
+    @Cacheable(cacheNames = "repositories")
     public Repos getRepositories(String username, Long page, Long perPage) {
-        ResponseEntity<List<Repo>> githubReposResponse = repoClient.queryGithubApiForRepos(username, page, perPage);
+        ResponseEntity<List<Repo>> githubReposResponse = repoClient
+                .queryGithubApiForRepos(username, page, perPage)
+                .block();
+
+        assert githubReposResponse != null;
 
         List<String> linkHeader = githubReposResponse.getHeaders().get(HttpHeaders.LINK);
         Links links = preparePaginationLinks(linkHeader);
-
         return new Repos(githubReposResponse.getBody(), links);
     }
 

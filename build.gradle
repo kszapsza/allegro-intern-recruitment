@@ -21,6 +21,10 @@ repositories {
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux', version: '2.4.5'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-cache'
+
+    implementation group: 'javax.cache', name: 'cache-api', version: '1.1.1'
+    implementation group: 'org.ehcache', name: 'ehcache', version: '3.8.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'

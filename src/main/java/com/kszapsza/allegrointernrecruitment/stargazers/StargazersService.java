@@ -3,6 +3,7 @@ package com.kszapsza.allegrointernrecruitment.stargazers;
 import com.kszapsza.allegrointernrecruitment.repo.Repo;
 import com.kszapsza.allegrointernrecruitment.repo.RepoService;
 import com.kszapsza.allegrointernrecruitment.repo.Repos;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +18,7 @@ public class StargazersService {
         this.repoService = repoService;
     }
 
+    @Cacheable(cacheNames = "stargazers")
     public Stargazers getTotalStargazers(String username) {
         long totalStargazers = 0L;
         long totalPages = 1L;
