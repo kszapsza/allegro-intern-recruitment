@@ -1,12 +1,7 @@
 {
   "properties": [
     {
-      "name": "restTemplate.connectTimeout",
-      "type": "java.lang.Long",
-      "description": "Timeout when connecting to external API with RestTemplate, expressed in milliseconds."
-    },
-    {
-      "name": "restTemplate.readTimeout",
+      "name": "webClient.timeout",
       "type": "java.lang.Long",
       "description": "Timeout when connecting to external API with RestTemplate, expressed in milliseconds."
     },

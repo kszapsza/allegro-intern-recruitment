@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.kszapsza.allegrointernrecruitment.util.Links;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
