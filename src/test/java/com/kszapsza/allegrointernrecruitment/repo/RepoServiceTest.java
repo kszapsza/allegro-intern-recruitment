@@ -1,6 +1,5 @@
 package com.kszapsza.allegrointernrecruitment.repo;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -18,29 +17,17 @@ import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 
-import static com.kszapsza.allegrointernrecruitment.repo.RepoMockDataFactory.getSampleRepos;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @ExtendWith({MockitoExtension.class})
 class RepoServiceTest {
 
-    private final String repoGetRequestUri = "api/v1/repos/allegro";
-
     @Mock
     private RepoClient repoClient;
 
     @InjectMocks
     private RepoService repoService;
-
-    @BeforeEach
-    public void setUp() {
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        request.setRequestURI(repoGetRequestUri);
-        request.setParameter("per_page", "30");
-        request.setParameter("page", "3");
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
-    }
 
     @Test
     public void shouldReturnEmptyListAndEmptyLinks() {
@@ -56,7 +43,7 @@ class RepoServiceTest {
 
         // then
         assertThat(repos.getRepositories(), hasSize(0));
-        assertThat(repos.getLinks(), nullValue());
+        assertThat(repos.getPagination(), nullValue());
     }
 
     @Test
@@ -66,20 +53,26 @@ class RepoServiceTest {
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn(Mono.just(new ResponseEntity<>(getSampleRepos(), HttpStatus.OK)));
+        ).thenReturn(Mono.just(new ResponseEntity<>(RepoMockDataFactory.getSampleRepoList(), HttpStatus.OK)));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
 
         // then
-        assertThat(repos.getRepositories(), hasSize(getSampleRepos().size()));
-        assertThat(repos.getRepositories(), equalTo(getSampleRepos()));
-        assertThat(repos.getLinks(), nullValue());
+        assertThat(repos.getRepositories(), hasSize(RepoMockDataFactory.getSampleRepoList().size()));
+        assertThat(repos.getRepositories(), equalTo(RepoMockDataFactory.getSampleRepoList()));
+        assertThat(repos.getPagination(), nullValue());
     }
 
     @Test
     public void shouldReturnValidReposAndValidLinks() {
         // given
+        String repoGetRequestUri = "api/v1/repos/allegro";
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI(repoGetRequestUri);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
         String linkHeaderContent = "<https://api.github.com/user/6154722/repos?per_page=30&page=2>; rel=\"prev\", " +
                 "<https://api.github.com/user/6154722/repos?per_page=30&page=4>; rel=\"next\", " +
                 "<https://api.github.com/user/6154722/repos?per_page=30&page=133>; rel=\"last\", " +
@@ -92,19 +85,19 @@ class RepoServiceTest {
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn((Mono.just(new ResponseEntity<>(getSampleRepos(), httpHeaders, HttpStatus.OK))));
+        ).thenReturn((Mono.just(new ResponseEntity<>(RepoMockDataFactory.getSampleRepoList(), httpHeaders, HttpStatus.OK))));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
 
         // then
         assertThat(repos.getRepositories(), hasSize(3));
-        assertThat(repos.getRepositories(), equalTo(getSampleRepos()));
+        assertThat(repos.getRepositories(), equalTo(RepoMockDataFactory.getSampleRepoList()));
 
-        assertThat(repos.getLinks(), notNullValue());
-        assertThat(repos.getLinks().getPrevPage(), endsWith(repoGetRequestUri + "?per_page=30&page=2"));
-        assertThat(repos.getLinks().getNextPage(), endsWith(repoGetRequestUri + "?per_page=30&page=4"));
-        assertThat(repos.getLinks().getLastPage(), endsWith(repoGetRequestUri + "?per_page=30&page=133"));
-        assertThat(repos.getLinks().getFirstPage(), endsWith(repoGetRequestUri + "?per_page=30&page=1"));
+        assertThat(repos.getPagination(), notNullValue());
+        assertThat(repos.getPagination().getPrevPage(), endsWith(repoGetRequestUri + "?per_page=30&page=2"));
+        assertThat(repos.getPagination().getNextPage(), endsWith(repoGetRequestUri + "?per_page=30&page=4"));
+        assertThat(repos.getPagination().getLastPage(), endsWith(repoGetRequestUri + "?per_page=30&page=133"));
+        assertThat(repos.getPagination().getFirstPage(), endsWith(repoGetRequestUri + "?per_page=30&page=1"));
     }
 }

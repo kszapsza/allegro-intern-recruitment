@@ -1,10 +1,30 @@
 package com.kszapsza.allegrointernrecruitment.util;
 
-public class Links {
+public class Pagination {
+    private long totalPages;
     private String prevPage;
     private String nextPage;
     private String lastPage;
     private String firstPage;
+
+    public Pagination() {
+    }
+
+    public Pagination(long totalPages, String prevPage, String nextPage, String lastPage, String firstPage) {
+        this.totalPages = totalPages;
+        this.prevPage = prevPage;
+        this.nextPage = nextPage;
+        this.lastPage = lastPage;
+        this.firstPage = firstPage;
+    }
+
+    public long getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(long totalPages) {
+        this.totalPages = totalPages;
+    }
 
     public String getPrevPage() {
         return prevPage;

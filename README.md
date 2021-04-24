@@ -50,7 +50,7 @@ curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1
 * `repositories` – list of user repositories
     * `name` – repository name
     * `stargazers_count` – amount of "stars" in this repository
-* `links` – pagination links (previous/next, last/first page)
+* `pagination` – pagination pagination (previous/next, last/first page)
 
 ```json5
 {
@@ -65,7 +65,7 @@ curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1
       "stargazers_count": 59
     }
   ],
-  "links": {
+  "pagination": {
     "prevPage": null,
     "nextPage": "http://localhost:8080/api/v1/repos/allegro?per_page=30&page=2",
     "lastPage": "http://localhost:8080/api/v1/repos/allegro?per_page=30&page=3",
@@ -98,9 +98,15 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
 }
 ```
 
+## Features
+
+* **Centralized exception handling** with `@ControllerAdvice`. 
+* **Unit tests** with Mockito.
+* **Caching** using Ehcache to improve performance.
+
 ## Further development
 
-* ⏳ **Anynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
-  total stars amount (for huge `microsoft` GitHub profile with over 4000 repos – even up to 1 minute). This is because
-  the application has to send multiple `GET` requests to GitHub API, in order to fetch all pages of paginated result.
-  Those requests are now sent synchronously and could be sent asynchronously to improve performance.
+* ⏳ **Asynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
+  total stars amount. This is because the application has to send multiple `GET` requests to GitHub API, in order to
+  fetch all pages of paginated result. Those requests are now sent synchronously and could be sent asynchronously to
+  improve performance.

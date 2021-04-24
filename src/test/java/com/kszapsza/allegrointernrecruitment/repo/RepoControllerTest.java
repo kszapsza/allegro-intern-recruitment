@@ -1,6 +1,5 @@
 package com.kszapsza.allegrointernrecruitment.repo;
 
-import com.kszapsza.allegrointernrecruitment.util.Links;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -11,11 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
-import java.util.List;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 @ExtendWith({MockitoExtension.class})
 class RepoControllerTest {
@@ -29,7 +25,7 @@ class RepoControllerTest {
     @Test
     public void shouldReturnHttpOkAndEmptyResponse() {
         // given
-        Repos repos = new Repos(Collections.emptyList(), null);
+        Repos repos = RepoMockDataFactory.getSampleReposWithNullPagination();
 
         Mockito.when(repoService.getRepositories(
                 ArgumentMatchers.anyString(),
@@ -39,40 +35,30 @@ class RepoControllerTest {
 
         // when
         ResponseEntity<?> controllerResponse = repoController.getRepositories("foo", 1L, 30L);
+        Repos actualReposResponse = (Repos) controllerResponse.getBody();
 
         // then
         assertThat(controllerResponse.getStatusCode(), equalTo(HttpStatus.OK));
-        assertThat(controllerResponse.getBody(), notNullValue());
-        assertThat(controllerResponse.getBody(), instanceOf(Repos.class));
-        assertThat(((Repos) controllerResponse.getBody()).getRepositories(), equalTo(Collections.emptyList()));
-        assertThat(((Repos) controllerResponse.getBody()).getLinks(), nullValue());
+        assertThat(repos, equalTo(actualReposResponse));
     }
 
     @Test
     public void shouldReturnHttpOkAndSampleResponse() {
         // given
-        List<Repo> sampleRepos = RepoMockDataFactory.getSampleRepos();
-        Links links = new Links();
-        links.setNextPage("foo");
-        Repos reposResponse = new Repos(sampleRepos, links);
+        Repos repos = RepoMockDataFactory.getSampleReposWithSamplePagination();
 
         Mockito.when(repoService.getRepositories(
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyLong(),
                 ArgumentMatchers.anyLong())
-        ).thenReturn(reposResponse);
+        ).thenReturn(repos);
 
         // when
         ResponseEntity<?> controllerResponse = repoController.getRepositories("foo", 1L, 30L);
+        Repos actualReposResponse = (Repos) controllerResponse.getBody();
 
         // then
         assertThat(controllerResponse.getStatusCode(), equalTo(HttpStatus.OK));
-
-        assertThat(controllerResponse.getBody(), notNullValue());
-        assertThat(controllerResponse.getBody(), instanceOf(Repos.class));
-        assertThat(((Repos) controllerResponse.getBody()).getRepositories(), equalTo(sampleRepos));
-
-        assertThat(((Repos) controllerResponse.getBody()).getLinks(), notNullValue());
-        assertThat(((Repos) controllerResponse.getBody()).getLinks().getNextPage(), equalTo("foo"));
+        assertThat(repos, equalTo(actualReposResponse));
     }
 }

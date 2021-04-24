@@ -1,14 +1,13 @@
 package com.kszapsza.allegrointernrecruitment.repo;
 
 import com.kszapsza.allegrointernrecruitment.util.LinkHeaderParser;
-import com.kszapsza.allegrointernrecruitment.util.Links;
+import com.kszapsza.allegrointernrecruitment.util.Pagination;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,23 +27,20 @@ public class RepoService {
         assert githubReposResponse != null;
 
         List<String> linkHeader = githubReposResponse.getHeaders().get(HttpHeaders.LINK);
-        Links links = preparePaginationLinks(linkHeader);
-        return new Repos(githubReposResponse.getBody(), links);
+        Pagination pagination = preparePaginationLinks(linkHeader, username);
+        return new Repos(githubReposResponse.getBody(), pagination);
     }
 
-    /**
-     * @param linkHeader HTTP "Link" header, retrieved from GitHub API response.
-     * @return An object containing HATEOAS hyperlinks for navigating between multiple pages in this REST API.
-     */
-    private Links preparePaginationLinks(List<String> linkHeader) {
+    private Pagination preparePaginationLinks(List<String> linkHeader, String username) {
         if (linkHeader != null && linkHeader.size() != 0) {
-            String contextUri = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .replaceQueryParam("page", Collections.emptyList())
-                    .replaceQueryParam("per_page", Collections.emptyList())
+            String uri = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
                     .toUriString();
-            return LinkHeaderParser.parseLinks(linkHeader, contextUri);
+            uri += "/api/v1/repos/" + username;
+            return LinkHeaderParser.parseLinks(linkHeader, uri);
         }
+
+
         return null;
     }
 }

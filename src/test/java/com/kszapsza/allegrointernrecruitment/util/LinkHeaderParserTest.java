@@ -13,13 +13,13 @@ class LinkHeaderParserTest {
                 "<https://api.github.com/user/562236/repos?per_page=30&page=3>; rel=\"last\"");
 
         // when
-        Links links = LinkHeaderParser.parseLinks(linkHeader, "");
+        Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertNull(links.getPrevPage());
-        Assertions.assertEquals("?per_page=30&page=2", links.getNextPage());
-        Assertions.assertEquals("?per_page=30&page=3", links.getLastPage());
-        Assertions.assertNull(links.getFirstPage());
+        Assertions.assertNull(pagination.getPrevPage());
+        Assertions.assertEquals("?per_page=30&page=2", pagination.getNextPage());
+        Assertions.assertEquals("?per_page=30&page=3", pagination.getLastPage());
+        Assertions.assertNull(pagination.getFirstPage());
     }
 
     @Test
@@ -31,13 +31,13 @@ class LinkHeaderParserTest {
                 "<https://api.github.com/user/6154722/repos?per_page=30&page=1>; rel=\"first\"");
 
         // when
-        Links links = LinkHeaderParser.parseLinks(linkHeader, "");
+        Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertEquals("?per_page=30&page=2", links.getPrevPage());
-        Assertions.assertEquals("?per_page=30&page=4", links.getNextPage());
-        Assertions.assertEquals("?per_page=30&page=132", links.getLastPage());
-        Assertions.assertEquals("?per_page=30&page=1", links.getFirstPage());
+        Assertions.assertEquals("?per_page=30&page=2", pagination.getPrevPage());
+        Assertions.assertEquals("?per_page=30&page=4", pagination.getNextPage());
+        Assertions.assertEquals("?per_page=30&page=132", pagination.getLastPage());
+        Assertions.assertEquals("?per_page=30&page=1", pagination.getFirstPage());
     }
 
     @Test
@@ -47,13 +47,13 @@ class LinkHeaderParserTest {
                 "<https://api.github.com/user/6154722/repos?per_page=30&page=4>; rel=\"bar\", ");
 
         // when
-        Links links = LinkHeaderParser.parseLinks(linkHeader, "");
+        Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertNull(links.getPrevPage());
-        Assertions.assertNull(links.getNextPage());
-        Assertions.assertNull(links.getLastPage());
-        Assertions.assertNull(links.getFirstPage());
+        Assertions.assertNull(pagination.getPrevPage());
+        Assertions.assertNull(pagination.getNextPage());
+        Assertions.assertNull(pagination.getLastPage());
+        Assertions.assertNull(pagination.getFirstPage());
     }
 
     @Test
@@ -63,12 +63,12 @@ class LinkHeaderParserTest {
                 "<https://api.github.com/user/6154722/repos?foo=abc&per_page=30&page=4>; rel=\"next\", ");
 
         // when
-        Links links = LinkHeaderParser.parseLinks(linkHeader, "");
+        Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertEquals("?foo=abc&page=30&foo=1", links.getPrevPage());
-        Assertions.assertEquals("?foo=abc&per_page=30&page=4", links.getNextPage());
-        Assertions.assertNull(links.getLastPage());
-        Assertions.assertNull(links.getFirstPage());
+        Assertions.assertEquals("?foo=abc&page=30&foo=1", pagination.getPrevPage());
+        Assertions.assertEquals("?foo=abc&per_page=30&page=4", pagination.getNextPage());
+        Assertions.assertNull(pagination.getLastPage());
+        Assertions.assertNull(pagination.getFirstPage());
     }
 }

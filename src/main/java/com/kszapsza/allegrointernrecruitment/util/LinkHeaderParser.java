@@ -1,6 +1,7 @@
 package com.kszapsza.allegrointernrecruitment.util;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,9 +13,9 @@ public class LinkHeaderParser {
         throw new IllegalAccessException();
     }
 
-    public static Links parseLinks(List<String> linkHeader, String baseUri) {
+    public static Pagination parseLinks(List<String> linkHeader, String baseUri) {
         String[] linkGroups = linkHeader.get(0).split(", ");
-        Links links = new Links();
+        Pagination pagination = new Pagination();
 
         for (String linkGroup : linkGroups) {
             Matcher uriMatcher = uriPattern.matcher(linkGroup);
@@ -23,21 +24,38 @@ public class LinkHeaderParser {
             if (uriMatcher.find() && roleMatcher.find()) {
                 switch (roleMatcher.group(1)) {
                     case "prev":
-                        links.setPrevPage(baseUri + uriMatcher.group(1));
+                        pagination.setPrevPage(baseUri + uriMatcher.group(1));
                         break;
                     case "next":
-                        links.setNextPage(baseUri + uriMatcher.group(1));
+                        pagination.setNextPage(baseUri + uriMatcher.group(1));
                         break;
                     case "first":
-                        links.setFirstPage(baseUri + uriMatcher.group(1));
+                        pagination.setFirstPage(baseUri + uriMatcher.group(1));
                         break;
                     case "last":
-                        links.setLastPage(baseUri + uriMatcher.group(1));
+                        pagination.setLastPage(baseUri + uriMatcher.group(1));
                         break;
                 }
             }
         }
 
-        return links;
+        long totalPages = evaluateTotalPages(pagination).orElse(1L);
+        pagination.setTotalPages(totalPages);
+
+        return pagination;
+    }
+
+    private static Optional<Long> evaluateTotalPages(Pagination pagination) {
+        if (pagination == null || pagination.getLastPage() == null) {
+            return Optional.empty();
+        }
+
+        String lastPageUri = pagination.getLastPage();
+        Pattern pagePattern = Pattern.compile("[&?]page=(\\d+).*");
+        Matcher pageMatcher = pagePattern.matcher(lastPageUri);
+
+        if (pageMatcher.find()) {
+            return Optional.of(Long.parseLong(pageMatcher.group(1)));
+        } else return Optional.empty();
     }
 }
