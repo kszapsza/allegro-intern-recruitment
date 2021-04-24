@@ -2,7 +2,6 @@ package com.kszapsza.allegrointernrecruitment.repo;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -12,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith({MockitoExtension.class})
 class RepoControllerTest {
@@ -27,11 +28,9 @@ class RepoControllerTest {
         // given
         Repos repos = RepoMockDataFactory.getSampleReposWithNullPagination();
 
-        Mockito.when(repoService.getRepositories(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyLong(),
-                ArgumentMatchers.anyLong())
-        ).thenReturn(repos);
+        Mockito
+                .when(repoService.getRepositories(anyString(), anyLong(), anyLong()))
+                .thenReturn(repos);
 
         // when
         ResponseEntity<?> controllerResponse = repoController.getRepositories("foo", 1L, 30L);
@@ -47,11 +46,9 @@ class RepoControllerTest {
         // given
         Repos repos = RepoMockDataFactory.getSampleReposWithSamplePagination();
 
-        Mockito.when(repoService.getRepositories(
-                ArgumentMatchers.anyString(),
-                ArgumentMatchers.anyLong(),
-                ArgumentMatchers.anyLong())
-        ).thenReturn(repos);
+        Mockito
+                .when(repoService.getRepositories(anyString(), anyLong(), anyLong()))
+                .thenReturn(repos);
 
         // when
         ResponseEntity<?> controllerResponse = repoController.getRepositories("foo", 1L, 30L);

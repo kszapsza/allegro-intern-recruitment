@@ -1,7 +1,7 @@
 package com.kszapsza.allegrointernrecruitment.util;
 
 public class Pagination {
-    private long totalPages;
+    private long totalPages = 1L;
     private String prevPage;
     private String nextPage;
     private String lastPage;

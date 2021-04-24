@@ -28,9 +28,9 @@ public class RepoService {
                     .block();
 
             assert githubReposResponse != null;
+
             List<String> linkHeader = githubReposResponse.getHeaders().get(HttpHeaders.LINK);
             Pagination pagination = preparePaginationLinks(linkHeader, username);
-
             return new Repos(githubReposResponse.getBody(), pagination);
         } catch (WebClientResponseException e) {
             throw new GithubHttpException(e.getResponseBodyAsString(), e.getStatusCode());
@@ -45,7 +45,6 @@ public class RepoService {
             uri += "/api/v1/repos/" + username;
             return LinkHeaderParser.parseLinks(linkHeader, uri);
         }
-
-        return null;
+        return new Pagination();
     }
 }

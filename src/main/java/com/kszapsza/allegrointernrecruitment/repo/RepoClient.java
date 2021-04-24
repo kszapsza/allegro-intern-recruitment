@@ -32,6 +32,16 @@ public class RepoClient {
     }
 
     public Mono<ResponseEntity<List<Repo>>> queryGithubApiForRepos(String username, Long page, Long perPage) {
+        URI getReposEndpointUri = buildRepoQueryUri(username, page, perPage);
+
+        try {
+            return buildRepoQueryMono(getReposEndpointUri);
+        } catch (ResourceAccessException e) {
+            throw new TimeoutException();
+        }
+    }
+
+    private URI buildRepoQueryUri(String username, Long page, Long perPage) {
         String getReposEndpoint = githubApiBaseUri
                 + "users/" + username
                 + "/repos?per_page=" + Objects.requireNonNullElse(perPage, 30L);
@@ -39,15 +49,10 @@ public class RepoClient {
         if (page != null && page >= 0) {
             getReposEndpoint += "&page=" + page;
         }
-
-        try {
-            return buildRepoQueryRequest(URI.create(getReposEndpoint));
-        } catch (ResourceAccessException e) {
-            throw new TimeoutException();
-        }
+        return URI.create(getReposEndpoint);
     }
 
-    private Mono<ResponseEntity<List<Repo>>> buildRepoQueryRequest(URI uri) {
+    private Mono<ResponseEntity<List<Repo>>> buildRepoQueryMono(URI uri) {
         return webClientBuilder.build()
                 .get()
                 .uri(uri)
