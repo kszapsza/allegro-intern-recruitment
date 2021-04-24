@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
@@ -30,11 +29,11 @@ public class GenericExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ResponseBody
-    @ExceptionHandler({WebClientResponseException.class})
-    protected ResponseEntity<?> handleUpstreamHttpStatusCodeException(WebClientResponseException ex, WebRequest request) {
+    @ExceptionHandler({GithubHttpException.class})
+    protected ResponseEntity<?> handleUpstreamHttpStatusCodeException(GithubHttpException ex, WebRequest request) {
         try {
             String message = new ObjectMapper()
-                    .readValue(ex.getResponseBodyAsString(), GithubErrorMessage.class)
+                    .readValue(ex.getResponseBodyJson(), GithubErrorMessage.class)
                     .getMessage();
             return handle(ex, request, ex.getStatusCode(), message);
         } catch (JsonProcessingException e) {

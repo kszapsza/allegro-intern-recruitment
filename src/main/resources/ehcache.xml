@@ -6,14 +6,14 @@ https://www.ehcache.org/schema/ehcache-core-3.0.xsd">
 
     <cache-template name="short">
         <expiry>
-            <ttl unit="minutes">3</ttl>
+            <ttl>20</ttl>
         </expiry>
         <heap>1000</heap>
     </cache-template>
 
     <cache-template name="long">
         <expiry>
-            <ttl unit="minutes">10</ttl>
+            <ttl unit="minutes">3</ttl>
         </expiry>
         <heap>1000</heap>
     </cache-template>
