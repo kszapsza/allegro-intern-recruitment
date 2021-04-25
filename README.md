@@ -32,25 +32,27 @@ API and allows to:
 
 ### Get user repositories
 
-Returns all repositories in user `{username}` profile. Shows at most 30 repos in a single page. `{page}` parameter
-specifies page number.
+Returns all repositories in user `{username}` profile.
 
 ```bash
-curl -X GET http://localhost:8080/api/v1/repos/{username}?page={page}
+curl -X GET http://localhost:8080/api/v1/repos/{username}?page={page}&per_page={per_page}
 ```
 
 **Sample request:**
 
 ```bash
-curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1
+curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1&per_page=2
 ```
+
+* `page` – number of page to be displayed (optional, 1st page by default)
+* `per_page` – records to be displayed per page (optional, 30 records by default)
 
 **Sample response:**
 
 * `repositories` – list of user repositories
     * `name` – repository name
-    * `stargazers_count` – amount of "stars" in this repository
-* `pagination` – pagination pagination (previous/next, last/first page)
+    * `stargazers_count` – amount of “stars” in this repository
+* `pagination` – pagination details (total pages count, links to previous/next, last/first page)
 
 ```json5
 {
@@ -59,16 +61,16 @@ curl -X GET http://localhost:8080/api/v1/repos/allegro?page=1
       "name": "akubra",
       "stargazers_count": 79
     },
-    /* for the sake of clarity, repos were skipped */
     {
-      "name": "fogger",
-      "stargazers_count": 59
+      "name": "allegro-api",
+      "stargazers_count": 132
     }
   ],
   "pagination": {
+    "totalPages": 43,
     "prevPage": null,
-    "nextPage": "http://localhost:8080/api/v1/repos/allegro?per_page=30&page=2",
-    "lastPage": "http://localhost:8080/api/v1/repos/allegro?per_page=30&page=3",
+    "nextPage": "http://localhost:8080/api/v1/repos/allegro?per_page=2&page=2",
+    "lastPage": "http://localhost:8080/api/v1/repos/allegro?per_page=2&page=43",
     "firstPage": null
   }
 }
@@ -101,8 +103,8 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
 ## Features
 
 * **Centralized exception handling** with `@ControllerAdvice`.
-* **Unit tests** with Mockito.
 * **Caching** using Ehcache to improve performance.
+* **Unit tests** with Mockito.
 
 ## Further development
 
