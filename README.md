@@ -10,23 +10,23 @@ API and allows to:
 
 ## Setup
 
+> :warning: **Important!** Before running the application, make sure you have configured `GITHUB_TOKEN` environment
+> variable (either in OS or IDE), containing GitHub authorization token (without `Bearer` prefix). Application will fail
+> to start with undeterminate variable!
+
 ### From terminal
 
-* Clone this repository.
-* Ensure you have installed Java ≥11 and Gradle.
+* Clone this repository (`git clone https://github.com/kszapsza/allegro-intern-recruitment.git`).
+* Make sure you have installed Java ≥11 and Gradle, and `JAVA_HOME` is set in OS env variables.
 * Open local project directory in any terminal.
 * Build the project: `./gradlew build`.
-* Make sure you have configured `GITHUB_TOKEN` environment variable, containing GitHub authorization token
-  (without `Bearer` prefix).
-* Finally, run built project: `./gradlew run`.
+* Finally, run built project: `./gradlew bootRun`.
 
 ### From IntelliJ IDEA
 
 * Clone this repository, either manually or from IDE itself (*Get from VCS*).
 * Wait for symbols to index, then run Gradle build task.
-* Make sure you have configured `GITHUB_TOKEN` environment variable, containing GitHub authorization token
-  (without `Bearer` prefix).
-* Run the project.
+* Run main application class entry point (`AllegroInternRecruitmentApplication.main()`).
 
 ## API documentation
 
@@ -106,7 +106,7 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
 
 ## Further development
 
-* ⏳ **Asynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
+* **Asynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
   total stars amount. This is because the application has to send multiple `GET` requests to GitHub API, in order to
   fetch all pages of paginated result. Those requests are now sent synchronously and could be sent asynchronously to
   improve performance.
