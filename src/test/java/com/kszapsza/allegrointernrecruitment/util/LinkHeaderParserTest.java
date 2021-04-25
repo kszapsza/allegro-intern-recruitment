@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
+
 class LinkHeaderParserTest {
     @Test
     public void shouldParseLinkHeaderWithNextAndLast() {
@@ -16,10 +20,11 @@ class LinkHeaderParserTest {
         Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertNull(pagination.getPrevPage());
-        Assertions.assertEquals("?per_page=30&page=2", pagination.getNextPage());
-        Assertions.assertEquals("?per_page=30&page=3", pagination.getLastPage());
-        Assertions.assertNull(pagination.getFirstPage());
+        assertThat(pagination.getTotalPages(), equalTo(3L));
+        assertThat(pagination.getPrevPage(), nullValue());
+        assertThat(pagination.getNextPage(), equalTo("?per_page=30&page=2"));
+        assertThat(pagination.getLastPage(), equalTo("?per_page=30&page=3"));
+        assertThat(pagination.getFirstPage(), nullValue());
     }
 
     @Test
@@ -34,10 +39,11 @@ class LinkHeaderParserTest {
         Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertEquals("?per_page=30&page=2", pagination.getPrevPage());
-        Assertions.assertEquals("?per_page=30&page=4", pagination.getNextPage());
-        Assertions.assertEquals("?per_page=30&page=132", pagination.getLastPage());
-        Assertions.assertEquals("?per_page=30&page=1", pagination.getFirstPage());
+        assertThat(pagination.getTotalPages(), equalTo(132L));
+        assertThat(pagination.getPrevPage(), equalTo("?per_page=30&page=2"));
+        assertThat(pagination.getNextPage(), equalTo("?per_page=30&page=4"));
+        assertThat(pagination.getLastPage(), equalTo("?per_page=30&page=132"));
+        assertThat(pagination.getFirstPage(), equalTo("?per_page=30&page=1"));
     }
 
     @Test
@@ -50,10 +56,11 @@ class LinkHeaderParserTest {
         Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertNull(pagination.getPrevPage());
-        Assertions.assertNull(pagination.getNextPage());
-        Assertions.assertNull(pagination.getLastPage());
-        Assertions.assertNull(pagination.getFirstPage());
+        assertThat(pagination.getTotalPages(), equalTo(1L));
+        assertThat(pagination.getPrevPage(), nullValue());
+        assertThat(pagination.getNextPage(), nullValue());
+        assertThat(pagination.getLastPage(), nullValue());
+        assertThat(pagination.getFirstPage(), nullValue());
     }
 
     @Test
@@ -66,9 +73,10 @@ class LinkHeaderParserTest {
         Pagination pagination = LinkHeaderParser.parseLinks(linkHeader, "");
 
         // then
-        Assertions.assertEquals("?foo=abc&page=30&foo=1", pagination.getPrevPage());
-        Assertions.assertEquals("?foo=abc&per_page=30&page=4", pagination.getNextPage());
-        Assertions.assertNull(pagination.getLastPage());
-        Assertions.assertNull(pagination.getFirstPage());
+        assertThat(pagination.getTotalPages(), equalTo(1L));
+        assertThat(pagination.getPrevPage(), equalTo("?foo=abc&page=30&foo=1"));
+        assertThat(pagination.getNextPage(), equalTo("?foo=abc&per_page=30&page=4"));
+        assertThat(pagination.getLastPage(), nullValue());
+        assertThat(pagination.getFirstPage(), nullValue());
     }
 }
