@@ -12,21 +12,23 @@ API and allows to:
 
 > :warning: **Important!** Before running the application, make sure you have configured `GITHUB_TOKEN` environment
 > variable (either in OS or IDE), containing GitHub authorization token (without `Bearer` prefix). Application will fail
-> to start with undeterminate variable!
+> to start with indeterminate variable!
 
 ### From terminal
 
 * Clone this repository (`git clone https://github.com/kszapsza/allegro-intern-recruitment.git`).
-* Make sure you have installed Java ≥11 and Gradle, and `JAVA_HOME` is set in OS env variables.
+* Make sure you have installed Java ≥11 and Gradle (and if `JAVA_HOME` is set in OS environment variables).
 * Open local project directory in any terminal.
 * Build the project: `./gradlew build`.
 * Finally, run built project: `./gradlew bootRun`.
+* You can also run tests with `./gradlew test` command.
 
 ### From IntelliJ IDEA
 
 * Clone this repository, either manually or from IDE itself (*Get from VCS*).
 * Wait for symbols to index, then run Gradle build task.
 * Run main application class entry point (`AllegroInternRecruitmentApplication.main()`).
+* You can also run tests by right-clicking test module and selecting *Run*.
 
 ## API documentation
 
@@ -104,11 +106,14 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
 
 * **Centralized exception handling** with `@ControllerAdvice`.
 * **Caching** using Ehcache to improve performance.
-* **Unit tests** with Mockito.
+* **Unit tests** with Mockito and Hamcrest.
 
 ## Further development
 
-* **Asynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
+* :hourglass: **Asynchronous API calls.** For user profiles with significant amount of repos, it takes a long time to determine
   total stars amount. This is because the application has to send multiple `GET` requests to GitHub API, in order to
   fetch all pages of paginated result. Those requests are now sent synchronously and could be sent asynchronously to
   improve performance.
+* :alembic: **Integration tests.** So far I only implemented unit tests based on mocks (with Mockito). Tests module could be
+  further expanded with some integration testing of whole app. This would require redirecting calls to GitHub API to
+  some prepared mock server, returning test data sets.
