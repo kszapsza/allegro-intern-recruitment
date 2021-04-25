@@ -1,5 +1,6 @@
 package com.kszapsza.allegrointernrecruitment.repo;
 
+import com.kszapsza.allegrointernrecruitment.MockDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,7 @@ class RepoControllerTest {
     @Test
     public void shouldReturnHttpOkAndEmptyResponse() {
         // given
-        Repos repos = RepoMockDataFactory.getSampleReposWithNullPagination();
+        Repos repos = MockDataFactory.getSampleReposWithNullPagination();
 
         Mockito
                 .when(repoService.getRepositories(anyString(), anyLong(), anyLong()))
@@ -44,7 +45,7 @@ class RepoControllerTest {
     @Test
     public void shouldReturnHttpOkAndSampleResponse() {
         // given
-        Repos repos = RepoMockDataFactory.getSampleReposWithSamplePagination();
+        Repos repos = MockDataFactory.getSampleReposWithSamplePagination();
 
         Mockito
                 .when(repoService.getRepositories(anyString(), anyLong(), anyLong()))

@@ -1,5 +1,6 @@
 package com.kszapsza.allegrointernrecruitment.repo;
 
+import com.kszapsza.allegrointernrecruitment.MockDataFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,14 +57,14 @@ class RepoServiceTest {
         // given
         Mockito
                 .when(repoClient.queryGithubApiForRepos(anyString(), anyLong(), anyLong()))
-                .thenReturn(Mono.just(new ResponseEntity<>(RepoMockDataFactory.getSampleRepoList(), HttpStatus.OK)));
+                .thenReturn(Mono.just(new ResponseEntity<>(MockDataFactory.getSampleRepoList(), HttpStatus.OK)));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
 
         // then
-        assertThat(repos.getRepositories(), hasSize(RepoMockDataFactory.getSampleRepoList().size()));
-        assertThat(repos.getRepositories(), equalTo(RepoMockDataFactory.getSampleRepoList()));
+        assertThat(repos.getRepositories(), hasSize(MockDataFactory.getSampleRepoList().size()));
+        assertThat(repos.getRepositories(), equalTo(MockDataFactory.getSampleRepoList()));
 
         assertThat(repos.getPagination(), notNullValue());
         assertThat(repos.getPagination().getTotalPages(), equalTo(1L));
@@ -93,14 +94,14 @@ class RepoServiceTest {
         Mockito
                 .when(repoClient.queryGithubApiForRepos(anyString(), anyLong(), anyLong()))
                 .thenReturn(Mono.just(
-                        new ResponseEntity<>(RepoMockDataFactory.getSampleRepoList(), httpHeaders, HttpStatus.OK)));
+                        new ResponseEntity<>(MockDataFactory.getSampleRepoList(), httpHeaders, HttpStatus.OK)));
 
         // when
         Repos repos = repoService.getRepositories("allegro", 1L, 30L);
 
         // then
         assertThat(repos.getRepositories(), hasSize(3));
-        assertThat(repos.getRepositories(), equalTo(RepoMockDataFactory.getSampleRepoList()));
+        assertThat(repos.getRepositories(), equalTo(MockDataFactory.getSampleRepoList()));
 
         assertThat(repos.getPagination(), notNullValue());
         assertThat(repos.getPagination().getTotalPages(), equalTo(133L));

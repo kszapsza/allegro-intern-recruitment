@@ -100,7 +100,7 @@ curl -X GET http://localhost:8080/api/v1/stargazers/allegro
 
 ## Features
 
-* **Centralized exception handling** with `@ControllerAdvice`. 
+* **Centralized exception handling** with `@ControllerAdvice`.
 * **Unit tests** with Mockito.
 * **Caching** using Ehcache to improve performance.
 

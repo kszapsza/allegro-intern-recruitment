@@ -1,10 +1,12 @@
-package com.kszapsza.allegrointernrecruitment.repo;
+package com.kszapsza.allegrointernrecruitment;
 
+import com.kszapsza.allegrointernrecruitment.repo.Repo;
+import com.kszapsza.allegrointernrecruitment.repo.Repos;
 import com.kszapsza.allegrointernrecruitment.util.Pagination;
 
 import java.util.List;
 
-public abstract class RepoMockDataFactory {
+public abstract class MockDataFactory {
     public static Repos getSampleReposWithNullPagination() {
         return new Repos(getSampleRepoList(), null);
     }

@@ -1,7 +1,7 @@
 package com.kszapsza.allegrointernrecruitment.stargazers;
 
+import com.kszapsza.allegrointernrecruitment.MockDataFactory;
 import com.kszapsza.allegrointernrecruitment.repo.Repo;
-import com.kszapsza.allegrointernrecruitment.repo.RepoMockDataFactory;
 import com.kszapsza.allegrointernrecruitment.repo.RepoService;
 import com.kszapsza.allegrointernrecruitment.repo.Repos;
 import com.kszapsza.allegrointernrecruitment.util.Pagination;
@@ -44,7 +44,7 @@ class StargazersServiceTest {
     @Test
     public void shouldReturnCorrectAmountOfStarsForSampleList() {
         // given
-        Repos repos = RepoMockDataFactory.getSampleReposWithNullPagination();
+        Repos repos = MockDataFactory.getSampleReposWithNullPagination();
 
         Long expectedStargazersCount = repos.getRepositories().stream()
                 .map(Repo::getStargazersCount)
@@ -66,11 +66,11 @@ class StargazersServiceTest {
     public void shouldReturnCorrectAmountOfStarsForSampleListWithMultiplePages() {
         // given
         Repos reposFirstPage = new Repos(
-                RepoMockDataFactory.getSampleRepoList(),
+                MockDataFactory.getSampleRepoList(),
                 new Pagination(2L, null, "foo?page=2", "foo?page=2", null));
 
         Repos reposSecondPage = new Repos(
-                RepoMockDataFactory.getSampleRepoList(),
+                MockDataFactory.getSampleRepoList(),
                 new Pagination(2L, "foo?page=1", null, null, "foo?page=1"));
 
         Long singlePageStargazersCount = reposFirstPage.getRepositories().stream()

@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 class AllegroInternRecruitmentApplicationTests {
 
     @Test
-    void contextLoads() {
+    void applicationStarts() {
+        AllegroInternRecruitmentApplication.main(new String[]{});
     }
 
 }
